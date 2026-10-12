@@ -1,128 +1,91 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1">
-  <title>Watch Trainer</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      background: #000;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 10px;
-    }
-    h2 { font-size: 18px; margin: 8px 0; }
-    #contador {
-      color: #30d158;
-      font-size: 52px;
-      margin: 12px 0;
-    }
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 12px;
-      font-size: 16px;
-      margin: 3px;
-      color: white;
-      background: #444;
-    }
-    .sumar { background: #248a3d; }
-    .guardar { background: #0a84ff; }
-    #historial {
-      font-size: 13px;
-      color: #ccc;
-      overflow-wrap: anywhere;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#080b10">
+<title>Padel Score v3</title>
+<style>
+*{box-sizing:border-box}html{background:#080b10}body{margin:0;padding:9px 8px 18px;background:#080b10;color:#f5f7fa;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;text-align:center}main{max-width:340px;margin:auto}.top{font-size:12px;color:#79e6ad;letter-spacing:1px;font-weight:700;margin:3px 0 8px}.status{font-size:12px;color:#b6c3d0;margin-bottom:8px;min-height:15px}.team{background:#19232d;border-radius:15px;padding:9px;margin:7px 0;display:grid;grid-template-columns:minmax(0,1fr) 74px;gap:6px;align-items:center;text-align:left}.name{font-size:14px;font-weight:700}.summary{font-size:11px;color:#bac6d0;margin-top:4px}.point{font-size:32px;font-weight:800;color:#80e6ae;margin-top:3px}.team:nth-of-type(2) .point{color:#fff}button{font:inherit;border:0;border-radius:12px;min-height:46px;cursor:pointer;font-weight:700}button:disabled{opacity:.4}.add{background:#228c50;color:white;font-size:15px;width:100%;padding:8px 4px}.team.rival .add{background:#425365}.actions{display:flex;gap:6px;margin-top:9px}.actions button{flex:1;background:#303a46;color:#fff;padding:8px 4px;font-size:12px}.sets{font-size:11px;line-height:1.5;color:#cad4dd;overflow-wrap:anywhere;margin:9px 0}.hint{font-size:10px;color:#8999a9;margin:8px 0 0}@media(max-width:190px){.team{grid-template-columns:minmax(0,1fr) 64px}.name{font-size:12px}.point{font-size:27px}.add{font-size:13px}}
+</style>
 </head>
 <body>
-  <h2>Dominadas</h2>
-  <div id="contador">0</div>
-
-  <button onclick="cambiar(-1)">-</button>
-  <button class="sumar" onclick="cambiar(1)">+1</button>
-
-  <p>
-    <button class="guardar" onclick="guardar()">
-      Guardar serie
-    </button>
-  </p>
-
-  <div id="historial"></div>
-  <p id="total"></p>
-
-  <button onclick="reiniciar()">Reiniciar</button>
-
-  <script>
-    let contador = 0;
-    let series = [];
-
-    try {
-      const guardado = localStorage.getItem('series');
-      if (guardado) {
-        const datos = JSON.parse(guardado);
-        if (Array.isArray(datos)) {
-          series = datos.filter(n =>
-            Number.isInteger(n) && n > 0
-          );
-        }
-      }
-    } catch (e) {
-      // El navegador puede bloquear el almacenamiento.
-    }
-
-    function cambiar(valor) {
-      contador = Math.max(0, contador + valor);
-      actualizar();
-    }
-
-    function guardar() {
-      if (contador === 0) return;
-      series.push(contador);
-      contador = 0;
-      persistir();
-      actualizar();
-    }
-
-    function persistir() {
-      try {
-        localStorage.setItem(
-          'series', JSON.stringify(series)
-        );
-      } catch (e) {}
-    }
-
-    function reiniciar() {
-      if (!confirm('¿Reiniciar sesión?')) return;
-      contador = 0;
-      series = [];
-      persistir();
-      actualizar();
-    }
-
-    function actualizar() {
-      document.getElementById('contador')
-        .textContent = contador;
-
-      document.getElementById('historial')
-        .textContent = series.length
-          ? 'Series: ' + series.join(' - ')
-          : 'Sin series registradas';
-
-      const total = series.reduce(
-        (suma, n) => suma + n, 0
-      ) + contador;
-
-      document.getElementById('total')
-        .textContent = 'Total: ' + total;
-    }
-
-    actualizar();
-  </script>
+<main>
+<div class="top">🎾 PADEL SCORE V3</div>
+<div id="status" class="status" aria-live="polite">Partido en curso</div>
+<section class="team"><div><div class="name">Nosotros</div><div id="summary0" class="summary">0 sets · 0 juegos</div><div id="point0" class="point">0</div></div><button class="add" onclick="addPoint(0)">+ Punto</button></section>
+<section class="team rival"><div><div class="name">Rivales</div><div id="summary1" class="summary">0 sets · 0 juegos</div><div id="point1" class="point">0</div></div><button class="add" onclick="addPoint(1)">+ Punto</button></section>
+<div id="sets" class="sets">Sets: —</div>
+<div class="actions"><button id="undo" onclick="undo()">↶ Deshacer</button><button onclick="newMatch()">Nuevo partido</button></div>
+<p class="hint">Se guarda automáticamente en este navegador.</p>
+</main>
+<script>
+'use strict';
+const KEY='padel-score-v3';
+const names=['Nosotros','Rivales'];
+function initial(){return {points:[0,0],games:[0,0],sets:[],tb:false,finished:false,history:[]};}
+let state=initial();
+try {
+ const saved=JSON.parse(localStorage.getItem(KEY));
+ if(saved && Array.isArray(saved.points) && saved.points.length===2 && Array.isArray(saved.games) && saved.games.length===2 && Array.isArray(saved.sets) && Array.isArray(saved.history) && typeof saved.tb==='boolean' && typeof saved.finished==='boolean') state=saved;
+} catch(e) {}
+function snapshot(){return {points:[...state.points],games:[...state.games],sets:state.sets.map(x=>[...x]),tb:state.tb,finished:state.finished};}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function setWins(team){return state.sets.filter(s=>s[team]>s[1-team]).length;}
+function finishSet(team){
+ const result=[...state.games];
+ state.sets.push(result);
+ state.games=[0,0];state.points=[0,0];state.tb=false;
+ if(setWins(team)===2)state.finished=true;
+}
+function addPoint(team){
+ if(state.finished)return;
+ state.history.push(snapshot());
+ state.points[team]++;
+ const other=1-team;
+ if(state.tb){
+  if(state.points[team]>=7 && state.points[team]-state.points[other]>=2){
+   state.games[team]++;finishSet(team);
+  }
+ }else if(state.points[team]>=4 && state.points[team]-state.points[other]>=2){
+  state.points=[0,0];state.games[team]++;
+  if(state.games[team]>=6 && state.games[team]-state.games[other]>=2){finishSet(team);}
+  else if(state.games[0]===6 && state.games[1]===6){state.tb=true;}
+ }
+ save();render();
+}
+function undo(){
+ if(!state.history.length)return;
+ const prev=state.history.pop();
+ Object.assign(state,prev);
+ save();render();
+}
+function newMatch(){
+ if(!confirm('¿Iniciar un partido nuevo? Se borrará el marcador actual.'))return;
+ state=initial();save();render();
+}
+function pointLabels(){
+ if(state.tb)return state.points.map(String);
+ const [a,b]=state.points;
+ if(a>=3 && b>=3){
+  if(a===b)return ['40','40'];
+  return a>b?['AD','40']:['40','AD'];
+ }
+ const labels=['0','15','30','40'];
+ return [labels[Math.min(a,3)],labels[Math.min(b,3)]];
+}
+function render(){
+ const labels=pointLabels();
+ for(let i=0;i<2;i++){
+  document.getElementById('point'+i).textContent=labels[i];
+  document.getElementById('summary'+i).textContent=setWins(i)+' sets · '+state.games[i]+' juegos';
+ }
+ document.getElementById('status').textContent=state.finished?'🏆 Ganaron: '+names[setWins(0)===2?0:1] : state.tb?'Tie-break (a 7, diferencia de 2)':'Partido en curso';
+ document.getElementById('sets').textContent='Sets: '+(state.sets.length?state.sets.map((s,i)=>'S'+(i+1)+': '+s[0]+'-'+s[1]).join('  |  '):'—');
+ document.querySelectorAll('.add').forEach(b=>b.disabled=state.finished);
+ document.getElementById('undo').disabled=!state.history.length;
+}
+render();
+</script>
 </body>
 </html>
