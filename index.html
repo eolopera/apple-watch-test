@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#080b10">
-<title>Padel Score v3</title>
+<title>Padel Score v4</title>
 <style>
-*{box-sizing:border-box}html{background:#080b10}body{margin:0;padding:9px 8px 18px;background:#080b10;color:#f5f7fa;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;text-align:center}main{max-width:340px;margin:auto}.top{font-size:12px;color:#79e6ad;letter-spacing:1px;font-weight:700;margin:3px 0 8px}.status{font-size:12px;color:#b6c3d0;margin-bottom:8px;min-height:15px}.team{background:#19232d;border-radius:15px;padding:9px;margin:7px 0;display:grid;grid-template-columns:minmax(0,1fr) 74px;gap:6px;align-items:center;text-align:left}.name{font-size:14px;font-weight:700}.summary{font-size:11px;color:#bac6d0;margin-top:4px}.point{font-size:32px;font-weight:800;color:#80e6ae;margin-top:3px}.team:nth-of-type(2) .point{color:#fff}button{font:inherit;border:0;border-radius:12px;min-height:46px;cursor:pointer;font-weight:700}button:disabled{opacity:.4}.add{background:#228c50;color:white;font-size:15px;width:100%;padding:8px 4px}.team.rival .add{background:#425365}.actions{display:flex;gap:6px;margin-top:9px}.actions button{flex:1;background:#303a46;color:#fff;padding:8px 4px;font-size:12px}.sets{font-size:11px;line-height:1.5;color:#cad4dd;overflow-wrap:anywhere;margin:9px 0}.hint{font-size:10px;color:#8999a9;margin:8px 0 0}@media(max-width:190px){.team{grid-template-columns:minmax(0,1fr) 64px}.name{font-size:12px}.point{font-size:27px}.add{font-size:13px}}
+*{box-sizing:border-box}html{background:#000}body{margin:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;text-align:center;padding:8px 8px 22px}main{max-width:360px;margin:auto}.top{font-size:14px;font-weight:800;color:#a5ffcc;margin:2px 0 5px}.status{font-size:14px;font-weight:700;color:#fff;min-height:18px;margin-bottom:7px}.team{background:#151d25;border:2px solid #667786;border-radius:16px;padding:9px;margin:9px 0;text-align:center}.team:first-of-type{border-color:#54ef91}.name{font-size:19px;font-weight:800;line-height:1.1}.summary{font-size:16px;font-weight:700;color:#fff;margin:5px 0}.point{font-size:clamp(52px,28vw,76px);font-weight:900;line-height:1.05;color:#86ffb3;margin:3px 0 7px;font-variant-numeric:tabular-nums}.team.rival .point{color:#fff}button{font-family:inherit;border:0;border-radius:13px;cursor:pointer;font-weight:800;touch-action:manipulation}button:disabled{opacity:.35}.add{display:block;width:100%;min-height:66px;background:#167b3f;color:#fff;font-size:24px;padding:9px 4px}.team.rival .add{background:#355a90}.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.actions button{min-height:52px;background:#303a46;color:#fff;padding:8px 3px;font-size:15px}.sets{font-size:15px;line-height:1.35;font-weight:700;color:#fff;overflow-wrap:anywhere;margin:10px 0}.hint{font-size:12px;color:#c0c9d1;margin:8px 0 0}
 </style>
 </head>
 <body>
 <main>
-<div class="top">🎾 PADEL SCORE V3</div>
+<div class="top">🎾 PADEL SCORE V4</div>
 <div id="status" class="status" aria-live="polite">Partido en curso</div>
-<section class="team"><div><div class="name">Nosotros</div><div id="summary0" class="summary">0 sets · 0 juegos</div><div id="point0" class="point">0</div></div><button class="add" onclick="addPoint(0)">+ Punto</button></section>
-<section class="team rival"><div><div class="name">Rivales</div><div id="summary1" class="summary">0 sets · 0 juegos</div><div id="point1" class="point">0</div></div><button class="add" onclick="addPoint(1)">+ Punto</button></section>
+<section class="team"><div class="name">NOSOTROS</div><div id="summary0" class="summary">0 sets · 0 juegos</div><div id="point0" class="point">0</div><button class="add" onclick="addPoint(0)">+ PUNTO</button></section>
+<section class="team rival"><div class="name">RIVALES</div><div id="summary1" class="summary">0 sets · 0 juegos</div><div id="point1" class="point">0</div><button class="add" onclick="addPoint(1)">+ PUNTO</button></section>
 <div id="sets" class="sets">Sets: —</div>
 <div class="actions"><button id="undo" onclick="undo()">↶ Deshacer</button><button onclick="newMatch()">Nuevo partido</button></div>
 <p class="hint">Se guarda automáticamente en este navegador.</p>
