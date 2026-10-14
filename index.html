@@ -3,87 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#080b10">
-<title>Padel Score v4</title>
+<meta name="theme-color" content="#000000">
+<title>Padel Score v5</title>
 <style>
-*{box-sizing:border-box}html{background:#000}body{margin:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;text-align:center;padding:8px 8px 22px}main{max-width:360px;margin:auto}.top{font-size:14px;font-weight:800;color:#a5ffcc;margin:2px 0 5px}.status{font-size:14px;font-weight:700;color:#fff;min-height:18px;margin-bottom:7px}.team{background:#151d25;border:2px solid #667786;border-radius:16px;padding:9px;margin:9px 0;text-align:center}.team:first-of-type{border-color:#54ef91}.name{font-size:19px;font-weight:800;line-height:1.1}.summary{font-size:16px;font-weight:700;color:#fff;margin:5px 0}.point{font-size:clamp(52px,28vw,76px);font-weight:900;line-height:1.05;color:#86ffb3;margin:3px 0 7px;font-variant-numeric:tabular-nums}.team.rival .point{color:#fff}button{font-family:inherit;border:0;border-radius:13px;cursor:pointer;font-weight:800;touch-action:manipulation}button:disabled{opacity:.35}.add{display:block;width:100%;min-height:66px;background:#167b3f;color:#fff;font-size:24px;padding:9px 4px}.team.rival .add{background:#355a90}.actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}.actions button{min-height:52px;background:#303a46;color:#fff;padding:8px 3px;font-size:15px}.sets{font-size:15px;line-height:1.35;font-weight:700;color:#fff;overflow-wrap:anywhere;margin:10px 0}.hint{font-size:12px;color:#c0c9d1;margin:8px 0 0}
+*{box-sizing:border-box}html{background:#000}body{margin:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;text-align:center;padding:8px 7px 28px}main{max-width:380px;margin:auto}.top{font-size:15px;font-weight:900;color:#b1ffd0;margin:3px 0 7px}.status{font-size:15px;font-weight:800;margin-bottom:8px;min-height:20px}.team{background:#131b23;border:2px solid #55ef93;border-radius:17px;padding:10px 7px;margin:9px 0}.team.rival{border-color:#78a8ff}.name{font-size:21px;font-weight:900;margin-bottom:9px}.score-grid{display:grid;grid-template-columns:1fr 1fr 1.6fr;gap:3px;align-items:center}.score-label{font-size:11px;font-weight:900;color:#d2d9e0;letter-spacing:.3px}.score-number{font-size:clamp(31px,12vw,50px);line-height:1.2;font-weight:900;font-variant-numeric:tabular-nums}.point-number{font-size:clamp(40px,17vw,66px);color:#8cffb9;letter-spacing:-2px}.rival .point-number{color:#fff}.side{display:inline-block;font-size:clamp(19px,8vw,30px);color:#ffd36c;margin-left:3px;vertical-align:middle;letter-spacing:0}.add,.action{display:block;width:100%;min-height:70px;padding:10px 4px;border:0;border-radius:14px;color:#fff;font-family:inherit;font-size:23px;font-weight:900;touch-action:manipulation;cursor:pointer}.add{background:#147d40;margin-top:11px}.rival .add{background:#245caa}.actions{display:grid;grid-template-columns:1fr;gap:9px;margin-top:12px}.action{background:#344456}.action.new{background:#6b3030}.action.confirm{background:#b44228}.action.cancel{background:#344456}button:disabled{opacity:.35}.sets{font-size:17px;font-weight:800;line-height:1.5;margin:11px 0;overflow-wrap:anywhere}.hint{font-size:12px;color:#c7cbd2;margin:12px 0}.hidden{display:none!important}
 </style>
 </head>
 <body>
 <main>
-<div class="top">🎾 PADEL SCORE V4</div>
+<div class="top">🎾 PADEL SCORE V5</div>
 <div id="status" class="status" aria-live="polite">Partido en curso</div>
-<section class="team"><div class="name">NOSOTROS</div><div id="summary0" class="summary">0 sets · 0 juegos</div><div id="point0" class="point">0</div><button class="add" onclick="addPoint(0)">+ PUNTO</button></section>
-<section class="team rival"><div class="name">RIVALES</div><div id="summary1" class="summary">0 sets · 0 juegos</div><div id="point1" class="point">0</div><button class="add" onclick="addPoint(1)">+ PUNTO</button></section>
-<div id="sets" class="sets">Sets: —</div>
-<div class="actions"><button id="undo" onclick="undo()">↶ Deshacer</button><button onclick="newMatch()">Nuevo partido</button></div>
-<p class="hint">Se guarda automáticamente en este navegador.</p>
+<section class="team"><div class="name">NOSOTROS</div><div class="score-grid"><div class="score-label">SETS</div><div class="score-label">JUEGOS</div><div class="score-label">PUNTOS</div><div id="sets0" class="score-number">0</div><div id="games0" class="score-number">0</div><div class="score-number point-number"><span id="point0">0</span><span id="side0" class="side">D</span></div></div><button class="add" onclick="addPoint(0)">+ PUNTO</button></section>
+<section class="team rival"><div class="name">RIVALES</div><div class="score-grid"><div class="score-label">SETS</div><div class="score-label">JUEGOS</div><div class="score-label">PUNTOS</div><div id="sets1" class="score-number">0</div><div id="games1" class="score-number">0</div><div class="score-number point-number"><span id="point1">0</span><span id="side1" class="side">D</span></div></div><button class="add" onclick="addPoint(1)">+ PUNTO</button></section>
+<div id="setsHistory" class="sets">Sets: —</div>
+<div class="actions"><button id="undo" class="action" onclick="undo()">↶ DESHACER</button><button id="newButton" class="action new" onclick="requestNewMatch()">NUEVO PARTIDO</button><button id="confirmButton" class="action confirm hidden" onclick="confirmNewMatch()">SÍ, REINICIAR TODO</button><button id="cancelButton" class="action cancel hidden" onclick="cancelNewMatch()">CANCELAR</button></div>
+<p class="hint">Marcador guardado en este navegador.</p>
 </main>
 <script>
 'use strict';
+// Reutiliza los datos de las versiones 3 y 4.
 const KEY='padel-score-v3';
 const names=['Nosotros','Rivales'];
 function initial(){return {points:[0,0],games:[0,0],sets:[],tb:false,finished:false,history:[]};}
 let state=initial();
-try {
+let pendingReset=false;
+try{
  const saved=JSON.parse(localStorage.getItem(KEY));
  if(saved && Array.isArray(saved.points) && saved.points.length===2 && Array.isArray(saved.games) && saved.games.length===2 && Array.isArray(saved.sets) && Array.isArray(saved.history) && typeof saved.tb==='boolean' && typeof saved.finished==='boolean') state=saved;
-} catch(e) {}
-function snapshot(){return {points:[...state.points],games:[...state.games],sets:state.sets.map(x=>[...x]),tb:state.tb,finished:state.finished};}
+}catch(e){}
+function snapshot(){return {points:[...state.points],games:[...state.games],sets:state.sets.map(s=>[...s]),tb:state.tb,finished:state.finished};}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
 function setWins(team){return state.sets.filter(s=>s[team]>s[1-team]).length;}
-function finishSet(team){
- const result=[...state.games];
- state.sets.push(result);
- state.games=[0,0];state.points=[0,0];state.tb=false;
- if(setWins(team)===2)state.finished=true;
-}
+function finishSet(team){state.sets.push([...state.games]);state.games=[0,0];state.points=[0,0];state.tb=false;if(setWins(team)>=2)state.finished=true;}
 function addPoint(team){
- if(state.finished)return;
+ if(state.finished || pendingReset)return;
  state.history.push(snapshot());
  state.points[team]++;
  const other=1-team;
  if(state.tb){
-  if(state.points[team]>=7 && state.points[team]-state.points[other]>=2){
-   state.games[team]++;finishSet(team);
-  }
+  if(state.points[team]>=7 && state.points[team]-state.points[other]>=2){state.games[team]++;finishSet(team);}
  }else if(state.points[team]>=4 && state.points[team]-state.points[other]>=2){
   state.points=[0,0];state.games[team]++;
-  if(state.games[team]>=6 && state.games[team]-state.games[other]>=2){finishSet(team);}
-  else if(state.games[0]===6 && state.games[1]===6){state.tb=true;}
+  if(state.games[team]>=6 && state.games[team]-state.games[other]>=2)finishSet(team);
+  else if(state.games[0]===6 && state.games[1]===6)state.tb=true;
  }
  save();render();
 }
-function undo(){
- if(!state.history.length)return;
- const prev=state.history.pop();
- Object.assign(state,prev);
- save();render();
-}
-function newMatch(){
- if(!confirm('¿Iniciar un partido nuevo? Se borrará el marcador actual.'))return;
- state=initial();save();render();
-}
+function undo(){if(!state.history.length || pendingReset)return;const previous=state.history.pop();Object.assign(state,previous);save();render();}
+function requestNewMatch(){pendingReset=true;render();}
+function cancelNewMatch(){pendingReset=false;render();}
+function confirmNewMatch(){state=initial();pendingReset=false;save();render();}
 function pointLabels(){
  if(state.tb)return state.points.map(String);
  const [a,b]=state.points;
- if(a>=3 && b>=3){
-  if(a===b)return ['40','40'];
-  return a>b?['AD','40']:['40','AD'];
- }
- const labels=['0','15','30','40'];
- return [labels[Math.min(a,3)],labels[Math.min(b,3)]];
+ if(a>=3 && b>=3){if(a===b)return ['40','40'];return a>b?['AD','40']:['40','AD'];}
+ const labels=['0','15','30','40'];return [labels[Math.min(a,3)],labels[Math.min(b,3)]];
 }
 function render(){
  const labels=pointLabels();
+ // El lado depende del total de puntos disputados en el juego/tie-break actual.
+ const side=(state.points[0]+state.points[1])%2===0?'D':'I';
  for(let i=0;i<2;i++){
+  document.getElementById('sets'+i).textContent=setWins(i);
+  document.getElementById('games'+i).textContent=state.games[i];
   document.getElementById('point'+i).textContent=labels[i];
-  document.getElementById('summary'+i).textContent=setWins(i)+' sets · '+state.games[i]+' juegos';
+  document.getElementById('side'+i).textContent=side;
  }
- document.getElementById('status').textContent=state.finished?'🏆 Ganaron: '+names[setWins(0)===2?0:1] : state.tb?'Tie-break (a 7, diferencia de 2)':'Partido en curso';
- document.getElementById('sets').textContent='Sets: '+(state.sets.length?state.sets.map((s,i)=>'S'+(i+1)+': '+s[0]+'-'+s[1]).join('  |  '):'—');
- document.querySelectorAll('.add').forEach(b=>b.disabled=state.finished);
- document.getElementById('undo').disabled=!state.history.length;
+ document.getElementById('status').textContent=pendingReset?'¿REINICIAR EL PARTIDO?':state.finished?'🏆 Ganaron: '+names[setWins(0)===2?0:1]:state.tb?'TIE-BREAK':'Partido en curso';
+ document.getElementById('setsHistory').textContent='Sets: '+(state.sets.length?state.sets.map((s,i)=>'S'+(i+1)+': '+s[0]+'-'+s[1]).join(' | '):'—');
+ document.querySelectorAll('.add').forEach(b=>b.disabled=state.finished||pendingReset);
+ document.getElementById('undo').disabled=!state.history.length||pendingReset;
+ document.getElementById('newButton').classList.toggle('hidden',pendingReset);
+ document.getElementById('confirmButton').classList.toggle('hidden',!pendingReset);
+ document.getElementById('cancelButton').classList.toggle('hidden',!pendingReset);
 }
 render();
 </script>
